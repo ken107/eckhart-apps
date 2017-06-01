@@ -1,0 +1,50 @@
+{
+  "intents": [
+    {
+      "intent": "SelectIssue",
+      "slots": [
+        {
+          "name": "issueNumber",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "SelectVideo",
+      "slots": [
+        {
+          "name": "issueNumber",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "videoPosition",
+          "type": "position"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.PauseIntent"
+    },
+    {
+      "intent": "AMAZON.ResumeIntent"
+    },
+    {
+      "intent": "AMAZON.NextIntent"
+    },
+    {
+      "intent": "AMAZON.PreviousIntent"
+    },
+    {
+      "intent": "AMAZON.StartOverIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    }
+  ]
+}

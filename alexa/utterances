@@ -1,0 +1,9 @@
+SelectIssue issue {issueNumber}
+SelectIssue open issue {issueNumber}
+SelectIssue list videos
+
+SelectVideo {videoPosition} video
+SelectVideo open the {videoPosition} video
+SelectVideo issue {issueNumber} {videoPosition} video
+SelectVideo open issue {issueNumber} {videoPosition} video
+SelectVideo open the {videoPosition} video in issue {issueNumber}

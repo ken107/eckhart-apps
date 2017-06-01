@@ -46,7 +46,7 @@ function listIssues() {
       return $(".item").get().map(function(item) {
         return {
           id: $(".thumb_video", item).attr("id").substr(6),
-          title: $(".title h3", item).text(),
+          title: $(".title h3", item).text().trim(),
         }
       })
     }
