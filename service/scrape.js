@@ -3,6 +3,9 @@ var os = require("os"),
   path = require("path"),
   creds = require(path.join(os.homedir(), ".etv", "credentials.json"));
 
+var AWS = require("aws-sdk"),
+  s3 = new AWS.S3({credentials: new AWS.SharedIniFileCredentials({profile: "services"})});
+
 //require("request-debug")(require("request"));
 
 module.exports = {
@@ -85,17 +88,53 @@ function getVideo(videoId) {
       else throw new Error(`Server returns ${res.statusCode}`);
     })
     .then(url => {
-      var file = path.join(process.cwd(), "download", path.basename(require("url").parse(url).pathname));
-      if (fs.existsSync(file)) return file;
-      else {
-        console.log("Downloading", url);
-        return request({url: url, saveToFile: file}).then(() => file);
-      }
+      var filename = path.basename(require("url").parse(url).pathname);
+      return checkExistsInS3(filename)
+        .then(exists => exists || downloadAndWriteToS3(url, filename))
+        .then(() => `https://s3.amazonaws.com/etnow/${filename}`)
     })
   function parse(text) {
     var m = text.match(/'(http:.*?)'/);
     if (m) return m[1];
     else throw new Error("Video URL not found");
+  }
+  function checkExistsInS3(key) {
+    return new Promise(function(fulfill, reject) {
+      s3.headObject({Bucket: "etnow", Key: key}, function(err, data) {
+        if (!err) fulfill(true);
+        else if (err.code == "NotFound") fulfill(false);
+        else reject(err);
+      })
+    })
+  }
+  function downloadAndWriteToS3(url, key) {
+    console.log("Downloading", url);
+    var tmpFile = path.join(process.cwd(), Math.random().toString(36).substr(2,8));
+    return request({url: url, saveToFile: tmpFile})
+      .then(res => {
+        if (is2xx(res)) return writeToS3(tmpFile, key);
+        else throw new Error(`Server returns ${res.statusCode}`);
+      })
+      .then(() => fs.unlink(tmpFile))
+      .catch(err => {
+        fs.unlink(tmpFile);
+        throw err;
+      })
+  }
+  function writeToS3(file, key) {
+    return new Promise(function(fulfill, reject) {
+      s3.putObject({
+        Bucket: "etnow",
+        Key: key,
+        ACL: "public-read",
+        Body: fs.createReadStream(file),
+        CacheControl: "max-age=8640000,public"
+      },
+      function(err, data) {
+        if (err) reject(err);
+        else fulfill();
+      })
+    })
   }
 }
 

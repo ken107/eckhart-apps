@@ -1,14 +1,14 @@
 
 var log = require("loglevel");
 
-exports.load = function(issueId) {
-  log.debug("issue", "load", issueId);
+exports.load = function(videoId) {
+  log.debug("video", "load", videoId);
 
   return new Promise(function(fulfill, reject) {
     require("https").get({
       hostname: "support.lsdsoftware.com",
       port: 30112,
-      path: `/eckhart/list-videos/${issueId}`
+      path: `/eckhart/get-video/${videoId}`
     },
     res => {
       if (res.statusCode == 200) {

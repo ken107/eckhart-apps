@@ -22,6 +22,10 @@ exports.handle = function(req, ses) {
       }
       return issue.videoList[ses.videoIndex];
     })
+    .then(preprocess(video => {
+      return require("../loader/video.js").load(video.id)
+        .then(url => video.url = url)
+    }))
     .then(video => {
       return {
         text: video.title,
@@ -33,7 +37,7 @@ exports.handle = function(req, ses) {
             audioItem: {
               stream: {
                 token: "123",
-                url: `https://d13iqryjd9nb3p.cloudfront.net/eckhart/get-video/${video.id}`,
+                url: video.url,
                 offsetInMilliseconds: 0
               }
             }
@@ -43,3 +47,9 @@ exports.handle = function(req, ses) {
       }
     })
 };
+
+function preprocess(func) {
+  return function(data) {
+    return func(data).then(() => data);
+  }
+}

@@ -6,7 +6,8 @@ exports.load = function() {
 
   return new Promise(function(fulfill, reject) {
     require("https").get({
-      hostname: "d13iqryjd9nb3p.cloudfront.net",
+      hostname: "support.lsdsoftware.com",
+      port: 30112,
       path: "/eckhart/list-issues"
     },
     res => {

@@ -27,7 +27,7 @@ function listVideos(req, res) {
 
 function getVideo(req, res) {
   return scrape.getVideo(req.params.videoId)
-    .then(file => res.set("Cache-Control", "max-age=8640000, public").sendFile(file, {cacheControl: false}))
+    .then(downloadUrl => res.json(downloadUrl))
     .catch(err => {
       console.error(err);
       res.status(500).end();
