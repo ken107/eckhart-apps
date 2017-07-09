@@ -22,6 +22,9 @@ function handle(ses) {
     return {
       text: "Goodbye.",
       title: "Stop",
+      directives: [
+        { type: "AudioPlayer.Stop" }
+      ],
       shouldEndSession: true
     }
   }
