@@ -1,7 +1,7 @@
 var os = require("os"),
   fs = require("fs"),
   path = require("path"),
-  creds = require(path.join(os.homedir(), ".etv", "credentials.json"));
+  creds = require(path.join(os.homedir(), ".services", "credentials.json")).etv;
 
 var AWS = require("aws-sdk"),
   s3 = new AWS.S3({credentials: new AWS.SharedIniFileCredentials({profile: "services"})});
