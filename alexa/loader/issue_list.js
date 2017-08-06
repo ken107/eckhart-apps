@@ -7,7 +7,6 @@ exports.load = function() {
   return new Promise(function(fulfill, reject) {
     require("https").get({
       hostname: "support.lsdsoftware.com",
-      port: 30112,
       path: "/eckhart/list-issues"
     },
     res => {
