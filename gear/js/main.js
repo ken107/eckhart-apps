@@ -28,7 +28,7 @@ function selectVideo() {
 	}
 	else {
 		ajaxGet(serviceUrl + "/eckhart/get-video/" + issues[issueIndex].videos[videoIndex].id, function(result) {
-			issues[issueIndex].videos[videoIndex].url = JSON.parse(result);
+			issues[issueIndex].videos[videoIndex].url = JSON.parse(result).replace(/^https:/, "http:");
 			play();
 		})
 	}
