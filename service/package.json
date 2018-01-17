@@ -3,6 +3,9 @@
   "description": "Scrape ETNow website and expose an API for listing and downloading videos",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "deploy": "rsync -avz --exclude=node_modules --exclude=.git . app:apps/services/eckhart"
+  },
   "dependencies": {
     "aws-sdk": "^2.82.0",
     "cheerio": "^1.0.0-rc.1",
