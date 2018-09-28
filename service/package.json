@@ -3,12 +3,16 @@
   "description": "Scrape ETNow website and expose an API for listing and downloading videos",
   "version": "1.0.0",
   "main": "scrape.js",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "aws-sdk": "^2.324.0",
     "cheerio": "^1.0.0-rc.2",
     "request": "^2.88.0"
   },
   "devDependencies": {
+    "jest": "^23.6.0",
     "request-debug": "^0.2.0"
   },
   "license": "ISC"
