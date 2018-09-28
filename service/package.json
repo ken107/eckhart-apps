@@ -2,14 +2,11 @@
   "name": "etnow-service",
   "description": "Scrape ETNow website and expose an API for listing and downloading videos",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "deploy": "rsync -avz --exclude=node_modules --exclude=.git . app:apps/services/eckhart"
-  },
+  "main": "scrape.js",
   "dependencies": {
-    "aws-sdk": "^2.82.0",
-    "cheerio": "^1.0.0-rc.1",
-    "request": "^2.81.0"
+    "aws-sdk": "^2.324.0",
+    "cheerio": "^1.0.0-rc.2",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "request-debug": "^0.2.0"
