@@ -1,22 +1,14 @@
 
 var log = require("loglevel");
+const axios = require("axios");
 
-exports.load = function() {
+exports.load = async function() {
   log.debug("issue-list", "load");
-
-  return new Promise(function(fulfill, reject) {
-    require("https").get({
-      hostname: "support.lsdsoftware.com",
-      path: "/eckhart/list-issues"
-    },
-    res => {
-      if (res.statusCode == 200) {
-        var chunks = [];
-        res.on("data", chunk => chunks.push(chunk));
-        res.on("end", () => fulfill(JSON.parse(Buffer.concat(chunks).toString())));
-      }
-      else reject(new Error(`Server returns ${res.statusCode}`));
-    })
-    .on("error", reject);
+  const res = await axios({
+    method: "POST",
+    url: "https://support.lsdsoftware.com:30299/eckhart-videos?capabilities=1.0",
+    data: {method: "listIssues"},
+    timeout: 15*1000
   })
+  return res.data;
 }
