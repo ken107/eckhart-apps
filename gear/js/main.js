@@ -1,5 +1,5 @@
 
-var serviceUrl = "https://support.lsdsoftware.com";
+var serviceUrl = "https://support.lsdsoftware.com:30299/eckhart-videos?capabilities=1.0";
 var audio = new Audio();
 
 state = "ISSUES";
@@ -14,8 +14,12 @@ function selectIssue() {
 		state = "VIDEOS";
 	}
 	else {
-		ajaxGet(serviceUrl + "/eckhart/list-videos/" + issues[issueIndex].id, function(result) {
-			issues[issueIndex].videos = JSON.parse(result);
+		ajaxPost(serviceUrl, {
+			method: "listVideos",
+			issueId: issues[issueIndex].id
+		},
+		function(result) {
+			issues[issueIndex].videos = result;
 			videoIndex = 0;
 			state = "VIDEOS";
 		})
@@ -27,8 +31,12 @@ function selectVideo() {
 		play();
 	}
 	else {
-		ajaxGet(serviceUrl + "/eckhart/get-video/" + issues[issueIndex].videos[videoIndex].id, function(result) {
-			issues[issueIndex].videos[videoIndex].url = JSON.parse(result).replace(/^https:/, "http:");
+		ajaxPost(serviceUrl, {
+			method: "getVideo",
+			videoId: issues[issueIndex].videos[videoIndex].id
+		},
+		function(result) {
+			issues[issueIndex].videos[videoIndex].url = result.replace(/^https:/, "http:");
 			play();
 		})
 	}
@@ -86,24 +94,30 @@ window.onload = function() {
 	document.addEventListener("rotarydetent", function(e) {
 		scroll(e.detail.direction == 'CCW');
 	});
-	ajaxGet(serviceUrl + "/eckhart/list-issues", function(result) {
-		issues = JSON.parse(result);
+	ajaxPost(serviceUrl, {
+		method: "listIssues"
+	},
+	function(result) {
+		issues = result;
 		issueIndex = 0;
 	})
 }
 
-function ajaxGet(sUrl, fulfill, reject) {
+function ajaxPost(url, data, fulfill) {
 	isLoading = true;
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", sUrl, true);
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.onreadystatechange = function() {
-		if (xhr.readyState == XMLHttpRequest.DONE) {
-			isLoading = false;
-			if (xhr.status == 200) fulfill(xhr.responseText);
-			else reject && reject(new Error(xhr.responseText));
+		if (xhr.readyState == 4) {
+			if (xhr.status == 200) {
+				isLoading = false;
+				fulfill(JSON.parse(xhr.responseText));
+			}
+			else console.error(xhr.responseText || xhr.statusText || xhr.status);
 		}
 	};
-	xhr.send(null);
+	xhr.send(JSON.stringify(data));
 }
 
 function toggle(elem, visible) {
