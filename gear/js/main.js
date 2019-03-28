@@ -1,5 +1,5 @@
 
-var serviceUrl = "https://support.lsdsoftware.com:30299/eckhart-videos?capabilities=1.0";
+var serviceUrl = "https://service.lsdsoftware.com/eckhart-videos?capabilities=1.0";
 var audio = new Audio();
 
 state = "ISSUES";
