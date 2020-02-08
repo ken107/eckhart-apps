@@ -125,6 +125,7 @@
 
       <table class="table table-sm" bind-statement-1="$(thisElem).toggle(#page == 'issues')">
         <tr bind-repeater-i="#issues.length" bind-var-item="#issues[#i]">
+          <td>{{#issues.length-#i}}.</td>
           <td>{{#item.title}}</td>
           <td style="text-align: right">
             <button type="button" class="btn btn-primary" bind-event-click="this.selectIssue(#item.id)">Open</button>
