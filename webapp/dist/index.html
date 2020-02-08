@@ -2,7 +2,31 @@
 <html>
   <head>
     <title>Eckhart Tolle Videos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+      .my-modal > :first-child {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: black;
+        opacity: .2;
+      }
+      .my-modal > :last-child {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+      }
+      .my-modal .spinner-border {
+        margin-left: -5vmin;
+        margin-top: -5vmin;
+        width: 10vmin;
+        height: 10vmin;
+      }
+    </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
@@ -13,6 +37,7 @@
       issues = null;
       videos = null;
       videoUrl = null;
+      progress = 0;
       listIssues().then(function(res) {issues = res});
 
       function selectIssue(issueId) {
@@ -31,6 +56,7 @@
       }
 
       function listIssues() {
+        progress++;
         return new Promise(function(fulfill) {
           $.post({
             url: "https://service.lsdsoftware.com/eckhart-videos?capabilities=1.0",
@@ -39,12 +65,16 @@
               method: "listIssues",
             }),
             dataType: "json",
-            success: fulfill
+            success: fulfill,
+            complete: function() {
+              progress--;
+            }
           })
         })
       }
-      
+
       function listVideos(issueId) {
+        progress++;
         return new Promise(function(fulfill) {
           $.post({
             url: "https://service.lsdsoftware.com/eckhart-videos?capabilities=1.0",
@@ -54,12 +84,16 @@
               issueId: issueId
             }),
             dataType: "json",
-            success: fulfill
+            success: fulfill,
+            complete: function() {
+              progress--;
+            }
           })
         })
       }
-      
+
       function getVideo(videoId) {
+        progress++;
         return new Promise(function(fulfill) {
           $.post({
             url: "https://service.lsdsoftware.com/eckhart-videos?capabilities=1.0",
@@ -69,7 +103,10 @@
               videoId: videoId
             }),
             dataType: "json",
-            success: fulfill
+            success: fulfill,
+            complete: function() {
+              progress--;
+            }
           })
         })
       }
@@ -78,12 +115,12 @@
   <body>
     <div class="container-fluid">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item" bind-event-click="#page = 'issues'">Issues</li>
+        <li class="breadcrumb-item" style="cursor: pointer" bind-event-click="#page = 'issues'">Issues</li>
         <li class="breadcrumb-item" bind-statement-1="$(thisElem).toggle(#page == 'videos')">Videos</li>
       </ol>
 
       <div bind-statement-1="$(thisElem).toggle(!!#videoUrl)">
-        <audio controls bind-statement-1="if (#videoUrl) thisElem.src = #videoUrl"></audio>
+        <audio controls bind-statement-1="if (#videoUrl) {thisElem.src = #videoUrl; thisElem.play()}"></audio>
       </div>
 
       <table class="table table-sm" bind-statement-1="$(thisElem).toggle(#page == 'issues')">
@@ -94,7 +131,7 @@
           </td>
         </tr>
       </table>
-      
+
       <table class="table" bind-statement-1="$(thisElem).toggle(#page == 'videos')">
         <tr bind-repeater-i="#videos.length" bind-var-item="#videos[#i]">
           <td>{{#item.title}}</td>
@@ -103,6 +140,15 @@
           </td>
         </tr>
       </table>
+    </div>
+
+    <div class="my-modal" bind-statement-1="$(thisElem).toggle(#progress > 0)">
+      <div></div>
+      <div>
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
     </div>
   </body>
 </html>
