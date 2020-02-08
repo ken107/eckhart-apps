@@ -1,0 +1,11 @@
+{
+  "name": "eckhart-videos-webapp",
+  "version": "1.0.0",
+  "description": "Webapp for viewing Eckhart Tolle videos",
+  "scripts": {
+    "start": "hs dist",
+    "deploy": "aws s3 sync --profile=s3 --metadata-directive REPLACE --cache-control max-age=1800,public dist s3://lsdsoftware-websites/eckhart.lsdsoftware.com"
+  },
+  "author": "Hai Phan <hai.phan@gmail.com>",
+  "license": "MIT"
+}

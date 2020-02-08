@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Eckhart Tolle Videos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://assets.lsdsoftware.com/databind.js"></script>
+
+    <script>
+      page = "issues";
+      issues = null;
+      videos = null;
+      videoUrl = null;
+      listIssues().then(function(res) {issues = res});
+
+      function selectIssue(issueId) {
+        listVideos(issueId)
+          .then(function(res) {
+            videos = res;
+            page = 'videos';
+          })
+      }
+
+      function selectVideo(videoId) {
+        getVideo(videoId)
+          .then(function(res) {
+            videoUrl = res;
+          })
+      }
+
+      function listIssues() {
+        return new Promise(function(fulfill) {
+          $.post({
+            url: "https://service.lsdsoftware.com/eckhart-videos?capabilities=1.0",
+            contentType: "application/json",
+            data: JSON.stringify({
+              method: "listIssues",
+            }),
+            dataType: "json",
+            success: fulfill
+          })
+        })
+      }
+      
+      function listVideos(issueId) {
+        return new Promise(function(fulfill) {
+          $.post({
+            url: "https://service.lsdsoftware.com/eckhart-videos?capabilities=1.0",
+            contentType: "application/json",
+            data: JSON.stringify({
+              method: "listVideos",
+              issueId: issueId
+            }),
+            dataType: "json",
+            success: fulfill
+          })
+        })
+      }
+      
+      function getVideo(videoId) {
+        return new Promise(function(fulfill) {
+          $.post({
+            url: "https://service.lsdsoftware.com/eckhart-videos?capabilities=1.0",
+            contentType: "application/json",
+            data: JSON.stringify({
+              method: "getVideo",
+              videoId: videoId
+            }),
+            dataType: "json",
+            success: fulfill
+          })
+        })
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item" bind-event-click="#page = 'issues'">Issues</li>
+        <li class="breadcrumb-item" bind-statement-1="$(thisElem).toggle(#page == 'videos')">Videos</li>
+      </ol>
+
+      <div bind-statement-1="$(thisElem).toggle(!!#videoUrl)">
+        <audio controls bind-statement-1="if (#videoUrl) thisElem.src = #videoUrl"></audio>
+      </div>
+
+      <table class="table table-sm" bind-statement-1="$(thisElem).toggle(#page == 'issues')">
+        <tr bind-repeater-i="#issues.length" bind-var-item="#issues[#i]">
+          <td>{{#item.title}}</td>
+          <td style="text-align: right">
+            <button type="button" class="btn btn-primary" bind-event-click="this.selectIssue(#item.id)">Open</button>
+          </td>
+        </tr>
+      </table>
+      
+      <table class="table" bind-statement-1="$(thisElem).toggle(#page == 'videos')">
+        <tr bind-repeater-i="#videos.length" bind-var-item="#videos[#i]">
+          <td>{{#item.title}}</td>
+          <td style="text-align: right">
+            <button type="button" class="btn btn-primary" bind-event-click="this.selectVideo(#item.id)">View</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

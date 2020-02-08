@@ -115,9 +115,9 @@ function getVideo(videoId) {
         if (is2xx(res)) return writeToS3(tmpFile, key);
         else throw new Error(`Server returns ${res.statusCode}`);
       })
-      .then(() => fs.unlink(tmpFile))
+      .then(() => fs.unlink(tmpFile, err => err && console.error(err)))
       .catch(err => {
-        fs.unlink(tmpFile);
+        fs.unlink(tmpFile, err => err && console.error(err));
         throw err;
       })
   }

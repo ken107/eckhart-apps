@@ -1,7 +1,7 @@
 {
   "name": "etnow-service",
   "description": "Scrape ETNow website and expose an API for listing and downloading videos",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "scrape.js",
   "scripts": {
     "test": "jest"
