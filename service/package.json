@@ -7,12 +7,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "^2.466.0",
+    "aws-sdk": "^2.656.0",
     "cheerio": "^1.0.0-rc.3",
-    "request": "^2.88.0"
+    "request": "^2.88.2"
   },
   "devDependencies": {
-    "jest": "^24.9.0",
+    "jest": "^25.3.0",
     "request-debug": "^0.2.0"
   },
   "license": "ISC"
