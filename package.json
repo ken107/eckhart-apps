@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "description": "Apps for viewing content from Eckhart Tolle Now website",
   "main": "service/scrape.js",
-  "dependencies": {
-    "aws-sdk": "^2.324.0",
-    "cheerio": "^1.0.0-rc.2",
-    "request": "^2.88.0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ken107/eckhart-apps.git"
