@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="Canvas Clock - Canvas API Tutorial"/>
+
+    <title>Canvas Clock - Canvas API Tutorial</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script src="js/databind.js"></script>
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+	<div class="alert"
+		bind-statement-1="if (#error) console.error(#error)">{{#error.message}}</div>
+    <h1>{{(#selectedYear || "Library") + (#isUpdating ? " (updating)" : "")}}</h1>
+    <div class="year-list"
+    		bind-repeater-if="!#selectedYear ? 1 : 0">
+    		<div class="selectable"
+    			bind-repeater-i="30"
+    			bind-var-year="2030-#i"
+    			bind-statement-1="thisElem.classList.toggle('hidden', !#data.issuesForYear[#year])"
+    			bind-event-click="#selectedYear = #year">{{#year}}</div>
+    </div>
+    <div class="month-list" bind-repeater-if="#selectedYear ? 1 : 0"
+    		bind-var-months="['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']">
+    		<div bind-repeater-i="#months.length"
+    			bind-var-issues="#data.issuesForYear[#selectedYear].issuesForMonth[#months[#i]]"
+    			bind-statement-1="thisElem.classList.toggle('hidden', !#issues)">
+    			<h2>{{#months[#i]}}</h2>
+    			<div class="issue-list">
+	    			<div class="selectable"
+	    				bind-repeater-j="#issues.length"
+	    				bind-var-issue="#issues[#j]"
+	    				bind-statement-1="thisElem.classList.toggle('hidden', #issue.author != 'eckhart')"
+	    				bind-event-click="this.playIssue(#issue)">{{#issue.title}}</div>
+	    		</div>
+    		</div>
+    </div>
+    <video controls></video>
+</body>
+</html>
