@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.8.2",
     "loglevel": "^1.6.7"
   }
 }
